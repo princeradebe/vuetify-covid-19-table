@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-container>
+                <v-card>
+                    <v-card-title>
+                        <v-text-field v-model="search" label="Search" single-line hide-details></v-text-field>
+                    </v-card-title>
+                    <v-data-table :headers="headers" :sort-by="Confirmed" :sort-desc="false" :items="countries" :search="search" item-key="country" class="elevation-1" loading loading-text="Loading... Please wait"></v-data-table>
+                </v-card>
+            </v-container>
+        </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data() {
+                return {
+                    search: '',
+                    headers: [{
+                            text: 'Countries',
+                            align: 'start',
+                            filterable: false,
+                            value: 'country',
+                        },
+                        {
+                            text: 'Confirmed',
+                            value: 'cases'
+                        },
+                        {
+                            text: 'Active',
+                            value: 'active'
+                        },
+                        {
+                            text: 'Recovered',
+                            value: 'recovered'
+                        },
+                        {
+                            text: 'Deaths',
+                            value: 'deaths'
+                        },
+                        {
+                            text: 'Today Cases',
+                            value: 'todayCases'
+                        },
+                    ],
+                    countries: [],
+                }
+            },
+            mounted () {
+                axios.get('https://corona.lmao.ninja/v2/countries').then(response => {
+                            // console.log(response.data);
+                            this.countries = response.data;
+                            // console.log(this.countries);
+                        }).catch(error => {
+                            console.log('Nothing here')
+                        })
+            }
+            },
+        );
+    </script>
+
+</body>
+
+</html>
