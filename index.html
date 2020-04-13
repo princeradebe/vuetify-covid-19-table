@@ -16,7 +16,13 @@
                     <v-card-title>
                         <v-text-field v-model="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :sort-by="Confirmed" :sort-desc="false" :items="countries" :search="search" item-key="country" class="elevation-1" loading loading-text="Loading... Please wait"></v-data-table>
+                    <div v-if="loading">
+                        <v-data-table :headers="headers" :sort-by="Confirmed" :sort-desc="false" :items="countries" :search="search" item-key="country" class="elevation-1" loading loading-text="Loading... Please wait"></v-data-table>
+                    </div>
+                    <div v-else>
+                        <v-data-table :headers="headers" :sort-by="Confirmed" :sort-desc="false" :items="countries" :search="search" item-key="country" class="elevation-1"></v-data-table>
+                    </div>
+                    </div>
                 </v-card>
             </v-container>
         </v-app>
@@ -32,6 +38,7 @@
             data() {
                 return {
                     search: '',
+                    loading: true,
                     headers: [{
                             text: 'Countries',
                             align: 'start',
@@ -69,7 +76,7 @@
                             // console.log(this.countries);
                         }).catch(error => {
                             console.log('Nothing here')
-                        })
+                        }).finally(() => this.loading = false)
             }
             },
         );
